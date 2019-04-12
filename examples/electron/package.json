@@ -3,6 +3,7 @@
   "name": "@theia/example-electron",
   "version": "0.13.0",
   "license": "EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0",
+  "main": "src-gen/frontend/electron-main.js",
   "theia": {
     "target": "electron",
     "frontend": {
@@ -59,6 +60,8 @@
   },
   "scripts": {
     "prepare": "yarn run clean && yarn build",
+    "package": "rimraf ./dist && electron-builder --publish=never",
+    "package:preview": "rimraf ./dist && electron-builder --dir",
     "clean": "theia clean",
     "build": "theiaext compile && theia build --mode development",
     "watch": "concurrently -n compile,bundle \"theiaext watch --preserveWatchOutput\" \"theia build --watch --mode development\"",
@@ -69,5 +72,9 @@
   },
   "devDependencies": {
     "@theia/cli": "^0.13.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theia-ide/theia.git"
   }
 }
