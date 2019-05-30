@@ -58,6 +58,9 @@ Breaking changes:
 
 Breaking changes:
 
+- [plugin] 'Hosted mode' extracted in `plugin-dev` extension
+- [electron] send log output to the output view (desktop version only)
+  - functions to read channel contents moved from OutputChannelManager to OutputChannelReaders
 - [core] `scheme` is mandatory for URI
   - `URI.withoutScheme` is removed, in order to get a path use `URI.path`
 - [core] `SelectionCommandHandler.getMulitSelection()` is renamed into `SelectionCommandHandler.getMultiSelection()`
