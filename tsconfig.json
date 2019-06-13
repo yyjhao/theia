@@ -126,6 +126,9 @@
       ],
       "@theia/userstorage/lib/*": [
         "packages/userstorage/src/*"
+      ],
+      "@theia/your-extension/lib/*": [
+        "packages/your-extension/src/*"
       ]
     },
     "plugins": [
