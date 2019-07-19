@@ -14,27 +14,18 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
 
-import { JsonRpcServer } from '@theia/core';
-
+export const OutputChannelServicePath = '/services/output-channel';
 export const OutputChannelService = Symbol('OutputChannelService');
-export const outputChannelServicePath = '/services/outputChannelService';
-
-/**
- * Interface that defines the functions the backend output channel server implements that can be invoked by the client/UI side.
- */
-export interface OutputChannelService extends JsonRpcServer<OutputChannelClient> {
-    getChannels(): Promise<{ name: string, group: string }[]>;
-    requestToSendContent(channelName: string): Promise<void>;
+export interface OutputChannelService {
+    list(options?: { visibleOnly?: boolean }): Promise<ReadonlyArray<ChannelDescriptor>>;
+    delete(name: string): Promise<boolean>;
+    select(name: string): Promise<boolean>;
+    selected(): Promise<ChannelDescriptor | undefined>;
+    appendLine(channel: string | ChannelDescriptor, message: string): Promise<void>;
 }
 
-export const OutputChannelClient = Symbol('OutputChannelClient');
-export const outputChannelClientPath = '/services/outputChannelClient';
-
-/**
- * Interface describing the functions that the backend output channel server can call on the frontend client.
- */
-export interface OutputChannelClient {
-    onChannelAdded(channelName: string, group: string): void;
-    onChannelDeleted(channelName: string): void;
-    onProcessOutput(line: string, channelName: string): void;
+export interface ChannelDescriptor {
+    readonly name: string;
+    // readonly group: string;
+    readonly visible: boolean;
 }

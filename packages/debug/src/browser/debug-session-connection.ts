@@ -19,7 +19,7 @@
 import { DebugProtocol } from 'vscode-debugprotocol';
 import { Deferred } from '@theia/core/lib/common/promise-util';
 import { Event, Emitter, DisposableCollection, Disposable } from '@theia/core';
-import { OutputChannel } from '@theia/output/lib/common/output-channel';
+import { OutputChannel } from 'packages/output/lib/browser/output-channel';
 import { IWebSocket } from 'vscode-ws-jsonrpc/lib/socket/socket';
 
 export interface DebugExitEvent {

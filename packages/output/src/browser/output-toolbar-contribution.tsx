@@ -14,18 +14,18 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
 
-import { inject, injectable } from 'inversify';
-import { OutputWidget } from './output-widget';
-import { OutputChannelReaders } from './output-channel-readers';
-import { TabBarToolbarContribution, TabBarToolbarRegistry } from '@theia/core/lib/browser/shell/tab-bar-toolbar';
-import { OutputCommands } from './output-contribution';
 import * as React from 'react';
+import { inject, injectable } from 'inversify';
+import { TabBarToolbarContribution, TabBarToolbarRegistry } from '@theia/core/lib/browser/shell/tab-bar-toolbar';
+import { OutputWidget } from './output-widget';
+import { OutputCommands } from './output-contribution';
+import { OutputChannelManager } from './output-channel';
 
 @injectable()
 export class OutputToolbarContribution implements TabBarToolbarContribution {
 
-    @inject(OutputChannelReaders)
-    protected readonly outputChannelManager: OutputChannelReaders;
+    @inject(OutputChannelManager)
+    protected readonly outputChannelManager: OutputChannelManager;
 
     async registerToolbarItems(toolbarRegistry: TabBarToolbarRegistry): Promise<void> {
         toolbarRegistry.registerItem({

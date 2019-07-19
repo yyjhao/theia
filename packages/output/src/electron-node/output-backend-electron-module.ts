@@ -16,23 +16,9 @@
 
 import { interfaces, ContainerModule } from 'inversify';
 import { ILoggerServer } from '@theia/core/lib/common/logger-protocol';
-import { ConnectionHandler, JsonRpcConnectionHandler } from '@theia/core/lib/common/messaging';
-import { OutputChannelClient, OutputChannelService, outputChannelServicePath } from '../common/output-channel-service';
-import { OutputChannelServiceImpl } from './output-channel-service-impl';
+// import { ConnectionHandler, JsonRpcConnectionHandler } from '@theia/core/lib/common/messaging';
 import { OutputChannelLoggerServer } from './output-channel-logger-server';
 
 export default new ContainerModule((bind: interfaces.Bind, unbind: interfaces.Unbind, isBound: interfaces.IsBound, rebind: interfaces.Rebind) => {
-    bind(OutputChannelServiceImpl).toSelf().inSingletonScope();
-    bind(OutputChannelService).toDynamicValue(ctx => {
-        const server = ctx.container.get(OutputChannelServiceImpl);
-        return server;
-    }).inSingletonScope();
-    bind(ConnectionHandler).toDynamicValue(ctx =>
-        new JsonRpcConnectionHandler<OutputChannelClient>(outputChannelServicePath, client => {
-            const server = ctx.container.get<OutputChannelServiceImpl>(OutputChannelService);
-            server.setClient(client);
-            return server;
-        })
-    ).inSingletonScope();
     rebind(ILoggerServer).to(OutputChannelLoggerServer).inSingletonScope();
 });

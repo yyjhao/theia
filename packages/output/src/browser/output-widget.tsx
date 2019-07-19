@@ -14,22 +14,19 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
 
+import * as React from 'react';
 import { inject, injectable, postConstruct } from 'inversify';
 import { Message } from '@theia/core/lib/browser';
-import { OutputChannel } from '../common/output-channel';
-import { OutputChannelReaders } from './output-channel-readers';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
-import * as React from 'react';
-
-import '../../src/browser/style/output.css';
+import { OutputChannelManager, OutputChannel } from './output-channel';
 
 export const OUTPUT_WIDGET_KIND = 'outputView';
 
 @injectable()
 export class OutputWidget extends ReactWidget {
 
-    @inject(OutputChannelReaders)
-    protected readonly outputChannelManager: OutputChannelReaders;
+    @inject(OutputChannelManager)
+    protected readonly outputChannelManager: OutputChannelManager;
 
     constructor() {
         super();
@@ -43,13 +40,12 @@ export class OutputWidget extends ReactWidget {
 
     @postConstruct()
     protected init(): void {
-        const channels = this.outputChannelManager.getChannels();
-        channels.forEach(this.registerNameAndGroup.bind(this));
-        this.toDispose.push(this.outputChannelManager.onDidAddChannel(channel => {
+        this.outputChannelManager.getChannels().forEach(this.registerListener.bind(this));
+        this.toDispose.push(this.outputChannelManager.onChannelAdded(channel => {
             this.registerListener(channel);
             this.update();
         }));
-        this.toDispose.push(this.outputChannelManager.onDidChangeSelection(event => {
+        this.toDispose.push(this.outputChannelManager.onSelectedChannelChange(event => {
             this.update();
         }));
         this.update();
@@ -63,11 +59,6 @@ export class OutputWidget extends ReactWidget {
         } else {
             this.node.focus();
         }
-    }
-
-    protected registerNameAndGroup(channelInfo: { name: string, group: string }): void {
-        const channel: OutputChannel = this.outputChannelManager.getChannel(channelInfo.name);
-        this.registerListener(channel);
     }
 
     protected registerListener(outputChannel: OutputChannel): void {

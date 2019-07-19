@@ -17,7 +17,7 @@
 import { injectable, inject } from 'inversify';
 import { MessageService } from '@theia/core/lib/common';
 import { Window, OutputChannel, MessageActionItem, MessageType } from 'monaco-languageclient/lib/services';
-import { OutputChannelManager } from '@theia/output/lib/common/output-channel';
+import { OutputChannelManager } from 'packages/output/lib/browser/output-channel';
 import { OutputContribution } from '@theia/output/lib/browser/output-contribution';
 
 @injectable()

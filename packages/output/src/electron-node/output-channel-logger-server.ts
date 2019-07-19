@@ -14,24 +14,16 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
 
-import { inject, injectable, postConstruct } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { LogLevel } from '@theia/core/lib/common/logger';
 import { ConsoleLoggerServer } from '@theia/core/lib/node/console-logger-server';
-import { OutputChannelServiceImpl, LogOutputChannel } from './output-channel-service-impl';
+import { OutputChannelService } from '../common/output-channel-service';
 
 @injectable()
 export class OutputChannelLoggerServer extends ConsoleLoggerServer {
 
-    @inject(OutputChannelServiceImpl)
-    protected loggerService: OutputChannelServiceImpl;
-
-    protected outputChannel: LogOutputChannel;
-
-    @postConstruct()
-    protected init() {
-        super.init();
-        this.outputChannel = this.loggerService.getChannel('Log (IDE Backend)', 'log');
-    }
+    @inject(OutputChannelService)
+    protected outputChannelService: OutputChannelService;
 
     // tslint:disable:no-any
     async log(name: string, logLevel: number, message: any, params: any[]): Promise<void> {
@@ -54,7 +46,7 @@ export class OutputChannelLoggerServer extends ConsoleLoggerServer {
 
         for (const m of messages) {
             const severity = (LogLevel.strings.get(logLevel) || 'unknown').toUpperCase();
-            this.outputChannel.appendLine(`${name} ${severity} ${m}`);
+            this.outputChannelService.appendLine(name, `${name} ${severity} ${m}`);
         }
     }
 
