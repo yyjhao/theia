@@ -16,8 +16,8 @@
 
 import { Disposable, DisposableCollection, Emitter } from '@theia/core';
 import { injectable, inject, postConstruct } from 'inversify';
-import { OutputChannelService, OutputChannelClient } from '../common/output-protocol';
-import { OutputPreferences } from '../common/output-preferences';
+import { OutputChannelService, OutputChannelClient } from '../common/output-channel-service';
+import { OutputPreferences } from './output-preferences';
 import { OutputChannel } from '../common/output-channel';
 import { OutputChannelManagerClient } from './output-channel-manager-client';
 

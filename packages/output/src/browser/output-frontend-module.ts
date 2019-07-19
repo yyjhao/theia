@@ -21,11 +21,11 @@ import { OutputContribution } from './output-contribution';
 import { OutputToolbarContribution } from './output-toolbar-contribution';
 import { OutputChannelManager } from '../common/output-channel';
 import { OutputChannelManagerClient } from './output-channel-manager-client';
-import { bindOutputPreferences } from '../common/output-preferences';
+import { bindOutputPreferences } from './output-preferences';
 import { TabBarToolbarContribution } from '@theia/core/lib/browser/shell/tab-bar-toolbar';
 
 import { WebSocketConnectionProvider } from '@theia/core/lib/browser';
-import { OutputChannelService, outputChannelServicePath } from '../common/output-protocol';
+import { OutputChannelService, outputChannelServicePath } from '../common/output-channel-service';
 import { OutputChannelReaders, OutputChannelReadersClient } from './output-channel-readers';
 
 export default new ContainerModule((bind: interfaces.Bind, unbind: interfaces.Unbind, isBound: interfaces.IsBound, rebind: interfaces.Rebind) => {

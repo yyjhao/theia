@@ -15,7 +15,7 @@
  ********************************************************************************/
 
 import { injectable } from 'inversify';
-import { OutputChannelClient, OutputChannelService } from '../common/output-protocol';
+import { OutputChannelClient, OutputChannelService } from '../common/output-channel-service';
 
 export interface LogOutputChannel {
     appendLine(line: string): void;

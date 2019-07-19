@@ -15,21 +15,12 @@
  ********************************************************************************/
 
 import { inject, injectable, postConstruct } from 'inversify';
-import { LoggerWatcher } from '@theia/core/lib/common/logger-watcher';
-import { LogLevelCliContribution } from '@theia/core/lib/node/logger-cli-contribution';
-import { ILoggerServer, ILoggerClient, ConsoleLogger } from '@theia/core/lib/common/logger-protocol';
-import { OutputChannelServiceImpl, LogOutputChannel } from '../node/output-channel-service-impl';
+import { LogLevel } from '@theia/core/lib/common/logger';
+import { ConsoleLoggerServer } from '@theia/core/lib/node/console-logger-server';
+import { OutputChannelServiceImpl, LogOutputChannel } from './output-channel-service-impl';
 
 @injectable()
-export class OutputChannelLoggerServer implements ILoggerServer {
-
-    protected client: ILoggerClient | undefined = undefined;
-
-    @inject(LoggerWatcher)
-    protected watcher: LoggerWatcher;
-
-    @inject(LogLevelCliContribution)
-    protected cli: LogLevelCliContribution;
+export class OutputChannelLoggerServer extends ConsoleLoggerServer {
 
     @inject(OutputChannelServiceImpl)
     protected loggerService: OutputChannelServiceImpl;
@@ -38,58 +29,33 @@ export class OutputChannelLoggerServer implements ILoggerServer {
 
     @postConstruct()
     protected init() {
-        for (const name of Object.keys(this.cli.logLevels)) {
-            this.setLogLevel(name, this.cli.logLevels[name]);
-        }
-
+        super.init();
         this.outputChannel = this.loggerService.getChannel('Log (IDE Backend)', 'log');
-    }
-
-    async setLogLevel(name: string, newLogLevel: number): Promise<void> {
-        const event = {
-            loggerName: name,
-            newLogLevel
-        };
-        if (this.client !== undefined) {
-            this.client.onLogLevelChanged(event);
-        }
-        this.watcher.fireLogLevelChanged(event);
-    }
-
-    async getLogLevel(name: string): Promise<number> {
-        return this.cli.logLevelFor(name);
     }
 
     // tslint:disable:no-any
     async log(name: string, logLevel: number, message: any, params: any[]): Promise<void> {
+        super.log(name, logLevel, message, params);
         const configuredLogLevel = await this.getLogLevel(name);
         if (logLevel >= configuredLogLevel) {
-            ConsoleLogger.log(name, logLevel, message, params);
-            this.logToOutput(name, message, params);
+            this.logToOutput(name, logLevel, message, params);
         }
     }
 
-    protected logToOutput(name: string, message: any, params: any[]): void {
+    protected logToOutput(name: string, logLevel: number, message: any, params: any[]): void {
+        const messages: string[] = [];
         if (typeof message === 'string') {
-            this.outputChannel.appendLine(message);
+            messages.push(message);
         } else if (message instanceof Array) {
-            message.forEach(line =>
-                this.logToOutput(name, line, params)
-            );
+            messages.push(...message);
         } else {
-            const line = JSON.stringify(message);
-            this.outputChannel.appendLine(line);
+            messages.push(JSON.stringify(message));
         }
-    }
 
-    async child(name: string): Promise<void> {
-        this.setLogLevel(name, this.cli.logLevelFor(name));
-    }
-
-    dispose(): void { }
-
-    setClient(client: ILoggerClient | undefined) {
-        this.client = client;
+        for (const m of messages) {
+            const severity = (LogLevel.strings.get(logLevel) || 'unknown').toUpperCase();
+            this.outputChannel.appendLine(`${name} ${severity} ${m}`);
+        }
     }
 
 }

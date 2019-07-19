@@ -15,7 +15,7 @@
  ********************************************************************************/
 
 import { Emitter, Event } from '@theia/core';
-import { OutputPreferences } from './output-preferences';
+import { OutputPreferences } from '../browser/output-preferences';
 
 export const OutputChannelManager = Symbol('OutputChannelManager');
 

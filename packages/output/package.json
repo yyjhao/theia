@@ -11,9 +11,6 @@
   "theiaExtensions": [
     {
       "frontend": "lib/browser/output-frontend-module",
-      "backend": "lib/node/output-backend-module"
-    },
-    {
       "backendElectron": "lib/electron-node/output-backend-electron-module"
     }
   ],

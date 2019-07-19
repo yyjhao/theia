@@ -16,21 +16,20 @@
 
 import { Emitter } from '@theia/core';
 import { injectable, inject } from 'inversify';
-import { OutputPreferences } from '../common/output-preferences';
+import { OutputPreferences } from './output-preferences';
 import { OutputChannel, OutputChannelManager, OutputOptions } from '../common/output-channel';
 
 @injectable()
 export class OutputChannelManagerClient implements OutputChannelManager {
-    protected readonly channels = new Map<string, OutputChannel>();
 
+    @inject(OutputPreferences) protected preferences: OutputPreferences;
+
+    protected readonly channels = new Map<string, OutputChannel>();
     protected readonly channelDeleteEmitter = new Emitter<{ channelName: string }>();
     protected readonly channelAddedEmitter = new Emitter<OutputChannel>();
+
     readonly onDidDeleteChannel = this.channelDeleteEmitter.event;
     readonly onDidAddChannel = this.channelAddedEmitter.event;
-
-    constructor(
-        @inject(OutputPreferences) protected preferences: OutputPreferences) {
-    }
 
     getChannel(name: string, options: OutputOptions = { group: 'default' }): OutputChannel {
         const existing = this.channels.get(name);
