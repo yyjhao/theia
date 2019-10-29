@@ -14,19 +14,24 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
 
-import { injectable } from 'inversify';
-import { ipcRenderer } from 'electron';
-import { NewWindowOptions } from '../../browser/window/window-service';
-import { DefaultWindowService } from '../../browser/window/default-window-service';
+import { injectable, inject } from 'inversify';
+
+import { NewWindowOptions } from '@theia/core/lib/browser/window/window-service';
+import { DefaultWindowService } from '@theia/core/lib/browser/window/default-window-service';
+
+import { ElectronMainWindowService } from '../../common/electron-window-protocol';
 
 @injectable()
 export class ElectronWindowService extends DefaultWindowService {
 
+    @inject(ElectronMainWindowService)
+    protected readonly electronMainWindowService: ElectronMainWindowService;
+
     openNewWindow(url: string, { external }: NewWindowOptions = {}): undefined {
         if (external) {
-            ipcRenderer.send('open-external', url);
+            this.electronMainWindowService.openExternalWindow(url);
         } else {
-            ipcRenderer.send('create-new-window', url);
+            this.electronMainWindowService.openElectronWindow(url);
         }
         return undefined;
     }
