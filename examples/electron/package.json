@@ -22,6 +22,7 @@
     "@theia/editor": "^0.13.0",
     "@theia/editor-preview": "^0.13.0",
     "@theia/editorconfig": "^0.13.0",
+    "@theia/electron": "0.13.0",
     "@theia/file-search": "^0.13.0",
     "@theia/filesystem": "^0.13.0",
     "@theia/getting-started": "^0.13.0",
