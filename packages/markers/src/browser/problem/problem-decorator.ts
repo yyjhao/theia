@@ -129,7 +129,12 @@ export class ProblemDecorator implements TreeDecorator {
         const position = TreeDecoration.IconOverlayPosition.BOTTOM_RIGHT;
         const icon = this.getOverlayIcon(marker);
         const color = this.getOverlayIconColor(marker);
+        const priority = this.getPriority(marker);
         return {
+            priority,
+            fontData: {
+                color,
+            },
             iconOverlay: {
                 position,
                 icon,
@@ -138,7 +143,7 @@ export class ProblemDecorator implements TreeDecorator {
                     shape: 'circle',
                     color: 'transparent'
                 }
-            }
+            },
         };
     }
 
@@ -159,6 +164,21 @@ export class ProblemDecorator implements TreeDecorator {
             case 2: return 'var(--theia-editorWarning-foreground)';
             case 3: return 'var(--theia-editorInfo-foreground)';
             default: return 'var(--theia-successBackground)';
+        }
+    }
+
+    /**
+     * Get the decoration for a given marker diagnostic.
+     * Markers with higher severity have a higher priority and should be displayed.
+     * @param marker the diagnostic marker.
+     */
+    protected getPriority(marker: Marker<Diagnostic>): number {
+        const { severity } = marker.data;
+        switch (severity) {
+            case 1: return 30; // Errors.
+            case 2: return 20; // Warnings.
+            case 3: return 10; // Infos.
+            default: return 0;
         }
     }
 
