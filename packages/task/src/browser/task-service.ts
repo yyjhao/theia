@@ -679,6 +679,8 @@ export class TaskService implements TaskConfigurationClient {
     }
 
     async runTask(task: TaskConfiguration, option?: RunTaskOption): Promise<TaskInfo | undefined> {
+        console.log(`>> run task ${task.label} `);
+
         const runningTasksInfo: TaskInfo[] = await this.getRunningTasks();
 
         // check if the task is active
