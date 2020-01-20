@@ -53,6 +53,7 @@ export class LocalStorageService implements StorageService {
 
     @postConstruct()
     protected init(): void {
+        console.log('------ LocalStorageService$init start');
         if (typeof window !== 'undefined' && window.localStorage) {
             this.storage = window.localStorage;
             this.testLocalStorage();
@@ -60,9 +61,11 @@ export class LocalStorageService implements StorageService {
             this.logger.warn(log => log("The browser doesn't support localStorage. state will not be persisted across sessions."));
             this.storage = {};
         }
+        console.log('------ LocalStorageService$init end');
     }
 
     setData<T>(key: string, data?: T): Promise<void> {
+        console.log('------ LocalStorageService$setData: key = ' + key + ', data = ' + JSON.stringify(data));
         if (data !== undefined) {
             try {
                 this.storage[this.prefix(key)] = JSON.stringify(data);
@@ -76,7 +79,9 @@ export class LocalStorageService implements StorageService {
     }
 
     getData<T>(key: string, defaultValue?: T): Promise<T | undefined> {
+        console.log('------ LocalStorageService$getData: key = ' + key);
         const result = this.storage[this.prefix(key)];
+        console.log('------ LocalStorageService$getData: data = ' + result);
         if (result === undefined) {
             return Promise.resolve(defaultValue);
         }
