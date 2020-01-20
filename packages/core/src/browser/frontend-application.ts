@@ -248,6 +248,7 @@ export class FrontendApplication {
      * been stored, by creating the default layout.
      */
     protected async initializeLayout(): Promise<void> {
+        console.log('****** initializeLayout');
         if (!await this.restoreLayout()) {
             // Fallback: Create the default shell layout
             await this.createDefaultLayout();
