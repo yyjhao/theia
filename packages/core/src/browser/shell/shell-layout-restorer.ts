@@ -149,11 +149,10 @@ export class ShellLayoutRestorer implements CommandContribution {
             try {
                 this.logger.info('>>> Storing the layout...');
                 const layoutData = app.shell.getLayoutData();
-                console.log('++++++ storeLayout$layoutData: ' + JSON.stringify(layoutData));
+                console.log('++++++ storeLayout$layoutData: ' + layoutData);
                 const serializedLayoutData = this.deflate(layoutData);
-                console.log('++++++ storeLayout$serializedLayoutData: ' + JSON.stringify(serializedLayoutData));
+                console.log('++++++ storeLayout$serializedLayoutData: ' + serializedLayoutData);
                 this.storageService.setData(this.storageKey, serializedLayoutData);
-                console.log('++++++ storeLayout$storageService: ' + JSON.stringify(this.storageService));
                 this.logger.info('<<< The layout has been successfully stored.');
             } catch (error) {
                 this.storageService.setData(this.storageKey, undefined);
@@ -171,7 +170,7 @@ export class ShellLayoutRestorer implements CommandContribution {
             return false;
         }
         const layoutData = await this.inflate(serializedLayoutData);
-        console.log('++++++ restoreLayout$layoutData: ' + JSON.stringify(layoutData));
+        console.log('++++++ restoreLayout$layoutData: ' + layoutData);
         await app.shell.setLayoutData(layoutData);
         this.logger.info('<<< The layout has been successfully restored.');
         return true;
