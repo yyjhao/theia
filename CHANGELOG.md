@@ -6,6 +6,13 @@
 
 Breaking changes:
 
+- Updated `example-browser` and `example-electron` applications to remove extensions which are instead contributed by VS Code builtin extensions [#6883](https://github.com/eclipse-theia/theia/pull/6883)
+  - Extensions removed from the example applications are deprecated and will be removed in the future. If adopters/extenders would like to continue
+  using the deprecated extensions, they must be self-maintained and can be accessed through the repository's Git history.
+  - In order to fetch plugins remotely, the `@theia/cli` script `download:plugins` can be used:
+    - In your `package.json` you can define:
+      - `theiaPluginDir`: to specify the folder in which to download plugins, in respect to your `package.json`
+      - `theiaPlugins`: to specify the list of plugins in the form of `"id": "url"`
 - [core] removed `virtual-renderer`. `react-renderer` should be used instead [#6885](https://github.com/eclipse-theia/theia/pull/6885)
 - [core] removed `virtual-widget`. `react-widget` should be used instead [#6885](https://github.com/eclipse-theia/theia/pull/6885)
 - [task] renamed method `getStrigifiedTaskSchema()` has been renamed to `getStringifiedTaskSchema()` [#6780](https://github.com/eclipse-theia/theia/pull/6780)
@@ -64,6 +71,13 @@ Breaking changes:
   Before these attributes have to be computed for all nodes and stored as a part of the layout.
   From now on they will be computed only on demand for visible nodes.
   It decreases requirements to the local storage and allows to invalidate node appearance by simply rerendering a tree.
+- [application-manager] `ApplicationPackageManager.start*` methods return an instance of a server child process instead of promise.
+- [cli] Generated webpack config is renamed to `gen-webpack.config.js`.
+  `webpack.config.js` is generated only once. It can be edited by users to custoimze bundling,
+  but should be based on `gen-webpack.config.js` to pick any changes in the generated config.
+  If it does not have a reference to `gen-webpack.config.js` then it will be regenerated.
+- [debug] removed `@theia/json` dependency. Applications should explicitly depend on `@theia/json` instead [#6647](https://github.com/eclipse-theia/theia/pull/6647)
+- [preferences] removed `@theia/json` dependency. Applications should explicitly depend on `@theia/json` instead [#6647](https://github.com/eclipse-theia/theia/pull/6647)
 
 ## v0.14.0
 
