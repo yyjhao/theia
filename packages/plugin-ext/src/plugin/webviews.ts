@@ -80,6 +80,7 @@ export class WebviewsExtImpl implements WebviewsExt {
         state: any,
         viewState: WebviewPanelViewState,
         options: theia.WebviewOptions & theia.WebviewPanelOptions): PromiseLike<void> {
+        console.log('######### call $deserializeWebviewPanel');
         if (!this.initData) {
             return Promise.reject(new Error('Webviews are not initialized'));
         }
