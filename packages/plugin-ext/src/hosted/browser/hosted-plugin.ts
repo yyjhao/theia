@@ -168,17 +168,23 @@ export class HostedPluginSupport {
         this.taskProviderRegistry.onWillProvideTaskProvider(event => this.ensureTaskActivation(event));
         this.taskResolverRegistry.onWillProvideTaskResolver(event => this.ensureTaskActivation(event));
         this.widgets.onDidCreateWidget(({ factoryId, widget }) => {
+            console.log('%%%%%%% onDidCreateWidget start');
             if (factoryId === WebviewWidget.FACTORY_ID && widget instanceof WebviewWidget) {
+                console.log('%%%%%%% onDidCreateWidget factoryId: ' + factoryId);
                 const storeState = widget.storeState.bind(widget);
                 const restoreState = widget.restoreState.bind(widget);
                 widget.storeState = () => {
+                    console.log('%%%%%%% onDidCreateWidget storeState, viewType: ' + widget.viewType);
                     if (this.webviewRevivers.has(widget.viewType)) {
+                        console.log('%%%%%%% onDidCreateWidget storeState run');
                         return storeState();
                     }
                     return {};
                 };
                 widget.restoreState = oldState => {
+                    console.log('%%%%%%% onDidCreateWidget restoreState, viewType: ' + oldState.viewType);
                     if (oldState.viewType) {
+                        console.log('%%%%%%% onDidCreateWidget restoreState run');
                         restoreState(oldState);
                         this.preserveWebview(widget);
                     } else {
@@ -186,6 +192,7 @@ export class HostedPluginSupport {
                     }
                 };
             }
+            console.log('%%%%%%% onDidCreateWidget end');
         });
     }
 
