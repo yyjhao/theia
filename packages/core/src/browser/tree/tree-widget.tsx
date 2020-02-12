@@ -1099,10 +1099,13 @@ export class TreeWidget extends ReactWidget implements StatefulWidget {
      */
     protected handleContextMenuEvent(node: TreeNode | undefined, event: React.MouseEvent<HTMLElement>): void {
         if (SelectableTreeNode.is(node)) {
-            // Keep the selection for the context menu, if the widget support multi-selection and the right click happens on an already selected node.
             if (!this.props.multiSelect || !node.selected) {
+                // Keep the selection for the context menu, if the widget support multi-selection and the right click happens on an already selected node.
                 const type = !!this.props.multiSelect && this.hasCtrlCmdMask(event) ? TreeSelection.SelectionType.TOGGLE : TreeSelection.SelectionType.DEFAULT;
                 this.model.addSelection({ node, type });
+            } else {
+                // since addSelection wasn't call, update global selection directly
+                this.updateGlobalSelection();
             }
             const contextMenuPath = this.props.contextMenuPath;
             if (contextMenuPath) {
