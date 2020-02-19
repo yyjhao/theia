@@ -19,10 +19,12 @@ import { CommandContribution } from '@theia/core';
 import { LabelProviderContribution } from '@theia/core/lib/browser/label-provider';
 import { ApiSamplesContribution } from './api-samples-contribution';
 import { SampleDynamicLabelProviderContribution } from './sample-dynamic-label-provider-contribution';
+import { FrontendApplicationContribution } from '@theia/core/lib/browser';
 
 export default new ContainerModule(bind => {
     bind(CommandContribution).to(ApiSamplesContribution).inSingletonScope();
 
     bind(SampleDynamicLabelProviderContribution).toSelf().inSingletonScope();
     bind(LabelProviderContribution).toService(SampleDynamicLabelProviderContribution);
+    bind(FrontendApplicationContribution).to(ApiSamplesContribution).inSingletonScope();
 });
