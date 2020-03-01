@@ -5441,6 +5441,10 @@ declare module '@theia/plugin' {
         TypeParameter = 25
     }
 
+    export enum SymbolTag {
+        Deprecated = 1
+    }
+
     /**
      * Represents information about programming constructs like variables, classes,
      * interfaces etc.
@@ -5461,6 +5465,8 @@ declare module '@theia/plugin' {
          * The kind of this symbol.
          */
         kind: SymbolKind;
+
+        tags?: ReadonlyArray<SymbolTag>;
 
         /**
          * The location of this symbol.
@@ -5512,6 +5518,8 @@ declare module '@theia/plugin' {
          * The kind of this symbol.
          */
         kind: SymbolKind;
+
+        tags?: ReadonlyArray<SymbolTag>;
 
         /**
          * The range enclosing this symbol not including leading/trailing whitespace but everything else, e.g comments and code.
