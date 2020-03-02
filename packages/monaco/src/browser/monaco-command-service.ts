@@ -54,7 +54,7 @@ export class MonacoCommandService implements ICommandService {
     async executeCommand(commandId: any, ...args: any[]): Promise<any> {
         const handler = this.commandRegistry.getActiveHandler(commandId, ...args);
         if (handler) {
-            this._onWillExecuteCommand.fire({ commandId });
+            this._onWillExecuteCommand.fire({ commandId, args });
             return handler.execute(...args);
         }
         return this.executeMonacoCommand(commandId, ...args);
