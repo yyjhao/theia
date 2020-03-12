@@ -14,7 +14,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
 
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import {
     Range,
     Position,
@@ -26,51 +26,13 @@ import {
     MinimapPosition
 } from '@theia/editor/lib/browser';
 import { DirtyDiff, LineRange } from './diff-computer';
+import { ColorRegistry } from '@theia/core/lib/browser/color-registry';
 
 export enum DirtyDiffDecorationType {
     AddedLine = 'dirty-diff-added-line',
     RemovedLine = 'dirty-diff-removed-line',
     ModifiedLine = 'dirty-diff-modified-line',
 }
-
-const AddedLineDecoration = <EditorDecorationOptions>{
-    linesDecorationsClassName: 'dirty-diff-glyph dirty-diff-added-line',
-    overviewRuler: {
-        color: 'editorOverviewRuler.addedForeground',
-        position: OverviewRulerLane.Left,
-    },
-    minimap: {
-        color: 'minimapGutter.addedBackground',
-        position: MinimapPosition.Gutter
-    },
-    isWholeLine: true
-};
-
-const RemovedLineDecoration = <EditorDecorationOptions>{
-    linesDecorationsClassName: 'dirty-diff-glyph dirty-diff-removed-line',
-    overviewRuler: {
-        color: 'editorOverviewRuler.deletedForeground',
-        position: OverviewRulerLane.Left,
-    },
-    minimap: {
-        color: 'minimapGutter.deletedBackground',
-        position: MinimapPosition.Gutter
-    },
-    isWholeLine: false
-};
-
-const ModifiedLineDecoration = <EditorDecorationOptions>{
-    linesDecorationsClassName: 'dirty-diff-glyph dirty-diff-modified-line',
-    overviewRuler: {
-        color: 'editorOverviewRuler.modifiedForeground',
-        position: OverviewRulerLane.Left,
-    },
-    minimap: {
-        color: 'minimapGutter.modifiedBackground',
-        position: MinimapPosition.Gutter
-    },
-    isWholeLine: true
-};
 
 export interface DirtyDiffUpdate extends DirtyDiff {
     readonly editor: TextEditor;
@@ -79,11 +41,14 @@ export interface DirtyDiffUpdate extends DirtyDiff {
 @injectable()
 export class DirtyDiffDecorator extends EditorDecorator {
 
+    @inject(ColorRegistry)
+    protected readonly colorRegistry: ColorRegistry;
+
     applyDecorations(update: DirtyDiffUpdate): void {
-        const modifications = update.modified.map(range => this.toDeltaDecoration(range, ModifiedLineDecoration));
-        const additions = update.added.map(range => this.toDeltaDecoration(range, AddedLineDecoration));
-        const removals = update.removed.map(line => this.toDeltaDecoration(line, RemovedLineDecoration));
-        const decorations = [...modifications, ...additions, ...removals];
+        const modifications = update.modified.map(range => this.toDeltaDecoration(range, this.getModifiedLineDecorationOptions()));
+        const additions = update.added.map(range => this.toDeltaDecoration(range, this.getAddedLineDecorationOptions()));
+        const deletions = update.removed.map(line => this.toDeltaDecoration(line, this.getDeletionLineDecorationOptions()));
+        const decorations = [...modifications, ...additions, ...deletions];
         this.setDecorations(update.editor, decorations);
     }
 
@@ -91,5 +56,65 @@ export class DirtyDiffDecorator extends EditorDecorator {
         const [start, end] = (typeof from === 'number') ? [from, from] : [from.start, from.end];
         const range = Range.create(Position.create(start, 0), Position.create(end, 0));
         return { range, options };
+    }
+
+    /**
+     * Get the modified line decoration.
+     *
+     * @returns the editor decoration options for modifications.
+     */
+    protected getModifiedLineDecorationOptions(): EditorDecorationOptions {
+        return <EditorDecorationOptions>{
+            linesDecorationsClassName: 'dirty-diff-glyph dirty-diff-modified-line',
+            overviewRuler: {
+                color: this.colorRegistry.getCurrentColor('editorOverviewRuler.modifiedForeground'),
+                position: OverviewRulerLane.Left,
+            },
+            minimap: {
+                color: this.colorRegistry.getCurrentColor('minimapGutter.modifiedBackground'),
+                position: MinimapPosition.Gutter
+            },
+            isWholeLine: true
+        };
+    }
+
+    /**
+     * Get the added line decoration.
+     *
+     * @returns the editor decoration options for additions.
+     */
+    protected getAddedLineDecorationOptions(): EditorDecorationOptions {
+        return <EditorDecorationOptions>{
+            linesDecorationsClassName: 'dirty-diff-glyph dirty-diff-added-line',
+            overviewRuler: {
+                color: this.colorRegistry.getCurrentColor('editorOverviewRuler.addedForeground'),
+                position: OverviewRulerLane.Left,
+            },
+            minimap: {
+                color: this.colorRegistry.getCurrentColor('minimapGutter.addedBackground'),
+                position: MinimapPosition.Gutter
+            },
+            isWholeLine: true
+        };
+    }
+
+    /**
+     * Get the deletion line decoration.
+     *
+     * @returns the editor decoration options for deletions.
+     */
+    protected getDeletionLineDecorationOptions(): EditorDecorationOptions {
+        return <EditorDecorationOptions>{
+            linesDecorationsClassName: 'dirty-diff-glyph dirty-diff-removed-line',
+            overviewRuler: {
+                color: this.colorRegistry.getCurrentColor('editorOverviewRuler.deletedForeground'),
+                position: OverviewRulerLane.Left,
+            },
+            minimap: {
+                color: this.colorRegistry.getCurrentColor('minimapGutter.deletedBackground'),
+                position: MinimapPosition.Gutter
+            },
+            isWholeLine: false
+        };
     }
 }
