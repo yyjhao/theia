@@ -730,7 +730,12 @@ declare module monaco.referenceSearch {
         show(range: IRange): void;
         hide(): void;
         focus(): void;
+        _tree: ReferenceTree
     }
+    export interface ReferenceTree {
+        getFocus(): ReferenceTreeElement[]
+    }
+    export interface ReferenceTreeElement { }
 
     // https://github.com/theia-ide/vscode/blob/standalone/0.19.x/src/vs/editor/contrib/gotoSymbol/peek/referencesController.ts#L30
     export interface ReferencesController extends IDisposable {
