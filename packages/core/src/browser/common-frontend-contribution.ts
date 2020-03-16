@@ -989,9 +989,15 @@ export class CommonFrontendContribution implements FrontendApplicationContributi
             // Input control colors should be aligned with https://code.visualstudio.com/api/references/theme-color#input-control
             // if not yet contributed by Monaco, check runtime css variables to learn
             { id: 'input.border', defaults: { hc: 'contrastBorder' }, description: 'Input box border.' },
-            { id: 'inputValidation.errorForeground', defaults: { dark: 'errorForeground', light: 'errorForeground', hc: 'errorForeground' }, description: 'Input validation foreground color for error severity.' },
-            { id: 'inputValidation.infoForeground', description: 'Input validation foreground color for information severity.' },
-            { id: 'inputValidation.warningForeground', description: 'Input validation foreground color for warning severity.' },
+            { id: 'inputValidation.infoBackground', defaults: { dark: '#063B49', light: '#D6ECF2', hc: Color.black }, description: 'Input validation background color for information severity.' },
+            { id: 'inputValidation.infoForeground', defaults: { dark: undefined, light: undefined, hc: undefined }, description: 'Input validation foreground color for information severity.' },
+            { id: 'inputValidation.infoBorder', defaults: { dark: '#007acc', light: '#007acc', hc: 'contrastBorder' }, description: 'Input validation border color for information severity.' },
+            { id: 'inputValidation.warningBackground', defaults: { dark: '#352A05', light: '#F6F5D2', hc: Color.black }, description: 'Input validation background color for warning severity.' },
+            { id: 'inputValidation.warningForeground', defaults: { dark: undefined, light: undefined, hc: undefined }, description: 'Input validation foreground color for warning severity.' },
+            { id: 'inputValidation.warningBorder', defaults: { dark: '#B89500', light: '#B89500', hc: 'contrastBorder' }, description: 'Input validation border color for warning severity.' },
+            { id: 'inputValidation.errorBackground', defaults: { dark: '#5A1D1D', light: '#F2DEDE', hc: Color.black }, description: 'Input validation background color for error severity.' },
+            { id: 'inputValidation.errorForeground', defaults: { dark: undefined, light: undefined, hc: undefined }, description: 'Input validation foreground color for error severity.' },
+            { id: 'inputValidation.errorBorder', defaults: { dark: '#BE1100', light: '#BE1100', hc: 'contrastBorder' }, description: 'Input validation border color for error severity.' },
 
             // Side Bar should be aligned with https://code.visualstudio.com/api/references/theme-color#side-bar
             // if not yet contributed by Monaco, check runtime css variables to learn
