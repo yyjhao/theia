@@ -1,5 +1,4 @@
 {
-  "editor.formatOnSave": true,
   "editor.insertSpaces": true,
   "[typescript]": {
     "editor.tabSize": 4
@@ -10,6 +9,9 @@
   "[jsonc]": {
     "editor.tabSize": 2
   },
+  "editor.formatOnSave": false,
+  "editor.formatOnPaste": false,
   "typescript.tsdk": "node_modules/typescript/lib",
-  "clang-format.language.typescript.enable": false    
+  "typescriptHero.imports.organizeOnSave": false,
+  "clang-format.language.typescript.enable": false
 }
