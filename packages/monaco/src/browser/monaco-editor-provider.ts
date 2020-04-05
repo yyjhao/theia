@@ -301,7 +301,10 @@ export class MonacoEditorProvider {
         return Object.keys(this.editorPreferences).reduce((options, preferenceName) => {
             const value = (<any>this.editorPreferences).get({ preferenceName, overrideIdentifier }, undefined, uri);
             return this.setOption(preferenceName, deepClone(value), prefixes, options);
-        }, {});
+        }, {
+            lineNumbersMinChars: 0,
+            lineDecorationsWidth: 0
+        });
     }
 
     protected setOption(preferenceName: string, value: any, prefixes: string[], options: { [name: string]: any } = {}): {
@@ -453,6 +456,7 @@ export class MonacoEditorProvider {
             horizontal: 'hidden'
         },
         lineDecorationsWidth: 0,
+        lineNumbersMinChars: 0,
         overviewRulerBorder: false,
         scrollBeyondLastLine: false,
         renderLineHighlight: 'none',

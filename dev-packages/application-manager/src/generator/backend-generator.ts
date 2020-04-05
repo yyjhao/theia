@@ -60,6 +60,9 @@ function start(port, host, argv) {
     const cliManager = container.get(CliManager);
     return cliManager.initializeCli(argv).then(function () {
         const application = container.get(BackendApplication);
+        application.use("/serviceworker.js", express.static(path.join(__dirname, '../../serviceworker.js')));
+        application.use("/manifest.webmanifest", express.static(path.join(__dirname, '../../manifest.webmanifest')));
+        application.use("/theia.png", express.static(path.join(__dirname, '../../theia.png')));
         application.use(express.static(path.join(__dirname, '../../lib')));
         application.use(express.static(path.join(__dirname, '../../lib/index.html')));
         return application.start(port, host);

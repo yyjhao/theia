@@ -57,7 +57,7 @@
   "scripts": {
     "prepare": "yarn run clean && yarn build",
     "clean": "theia clean",
-    "build": "theia build --mode production",
+    "build": "theia build --mode development",
     "watch": "yarn build --watch",
     "start": "theia start --plugins=local-dir:../../plugins",
     "start:debug": "yarn start --log-level=debug",

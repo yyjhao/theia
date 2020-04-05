@@ -20,8 +20,8 @@
 
 
 :root {
-  --theia-private-menubar-height: 32px;
-  --theia-private-menu-item-height: 24px;
+  --theia-private-menubar-height: 20px;
+  --theia-private-menu-item-height: 20px;
   --theia-menu-z-index: 10000;
 }
 

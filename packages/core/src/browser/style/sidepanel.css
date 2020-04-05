@@ -19,7 +19,7 @@
 |----------------------------------------------------------------------------*/
 
 :root {
-  --theia-private-sidebar-tab-width: 50px;
+  --theia-private-sidebar-tab-width: 40px;
   --theia-private-sidebar-tab-height: 32px;
   --theia-private-sidebar-scrollbar-rail-width: 7px;
   --theia-private-sidebar-scrollbar-width: 5px;

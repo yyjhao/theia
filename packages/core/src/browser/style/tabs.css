@@ -4,7 +4,7 @@
 
 :root {
   /* These need to be root because tabs get attached to the body during dragging. */
-  --theia-private-horizontal-tab-height: 28.5px;
+  --theia-private-horizontal-tab-height: 24.5px;
   --theia-private-horizontal-tab-scrollbar-rail-height: 7px;
   --theia-private-horizontal-tab-scrollbar-height: 5px;
   --theia-tabbar-toolbar-z-index: 1001;

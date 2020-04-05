@@ -53,6 +53,7 @@ export class FrontendGenerator extends AbstractGenerator {
 </head>
 
 <body>
+  <noscript>you need js</nosript>
   <div class="theia-preload">${this.compileIndexPreload(frontendModules)}</div>
 </body>
 
@@ -62,12 +63,17 @@ export class FrontendGenerator extends AbstractGenerator {
     protected compileIndexHead(frontendModules: Map<string, string>): string {
         return `
   <meta charset="UTF-8">
+  <link rel="shortcut icon" type="image/png" href="/theia.png"/>
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Theia">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
   <meta name="nightmode" content="disable">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">`;
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="512x512" href="/theia.png">
+  <meta name="theme-color" content="#3c3c3c"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">`;
     }
 
     protected compileIndexJs(frontendModules: Map<string, string>): string {
@@ -83,6 +89,10 @@ const { messagingFrontendModule } = require('@theia/core/lib/${this.pck.isBrowse
 const { loggerFrontendModule } = require('@theia/core/lib/browser/logger-frontend-module');
 const { ThemeService } = require('@theia/core/lib/browser/theming');
 const { FrontendApplicationConfigProvider } = require('@theia/core/lib/browser/frontend-application-config-provider');
+
+navigator.serviceWorker.register('/serviceworker.js', {
+    scope: '.' // <--- THIS BIT IS REQUIRED
+});
 
 FrontendApplicationConfigProvider.set(${this.prettyStringify(this.pck.props.frontend.config)});
 
